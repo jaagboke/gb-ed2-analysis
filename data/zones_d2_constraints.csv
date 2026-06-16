@@ -1,0 +1,15 @@
+dno,region_id,binding_boundary,constraint_metric,d2_score
+SSEN (Scottish Hydro),1,SCOTEX,4516.3,0.361675
+SP Distribution,2,SCOTEX,4516.3,0.361675
+Electricity North West,3,GM+ SNOW5A,3378.0,0.620244
+Northern Powergrid (Northeast),4,SSE+GRM,2301.8,0.864707
+Northern Powergrid (Yorkshire),5,SSE+GRM,2301.8,0.864707
+SP Manweb,6,GM+ SNOW5A,3378.0,0.620244
+NGED South Wales,7,NKILGRMO,2163.0,0.896236
+NGED West Midlands,8,HARSPNBLY,5309.3,0.181541
+NGED East Midlands,9,DRESHEX1,6108.5,0.0
+UKPN East of England,10,ESTEX,6007.0,0.023056
+NGED South West,11,NKILGRMO,2163.0,0.896236
+SSEN (Southern Electric),12,SSEN-S,1706.2,1.0
+UKPN London,13,SSE-SP2,1776.3,0.984077
+UKPN South East,14,SSE-SP2,1776.3,0.984077

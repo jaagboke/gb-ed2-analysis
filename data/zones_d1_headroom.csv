@@ -1,0 +1,15 @@
+dno,region_id,ttc_lvssb_days,d1_score
+SSEN (Scottish Hydro),1,15.5,1.0
+SP Distribution,2,31.71,0.667214
+Electricity North West,3,24.92,0.806611
+Northern Powergrid (Northeast),4,64.21,0.0
+Northern Powergrid (Yorkshire),5,51.48,0.261343
+SP Manweb,6,40.47,0.487374
+NGED South Wales,7,35.43,0.590844
+NGED West Midlands,8,31.48,0.671936
+NGED East Midlands,9,33.12,0.638267
+UKPN East of England,10,36.76,0.563539
+NGED South West,11,47.4,0.345104
+SSEN (Southern Electric),12,48.72,0.318005
+UKPN London,13,39.96,0.497844
+UKPN South East,14,44.73,0.399918

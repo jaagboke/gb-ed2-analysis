@@ -1,0 +1,101 @@
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-header {
+  background: var(--green-darkest);
+  color: #fff;
+  flex-shrink: 0;
+  height: var(--header-height);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 24px;
+}
+
+.header-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.header-subtitle {
+  font-size: 12px;
+  opacity: 0.72;
+  margin-top: 3px;
+  font-weight: 400;
+}
+
+.header-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.panel {
+  overflow-y: auto;
+}
+
+.panel-left {
+  width: var(--panel-left);
+  flex-shrink: 0;
+  background: var(--grey-bg);
+  border-right: 1px solid var(--grey-border);
+}
+
+.panel-centre {
+  flex: 1;
+  background: #fff;
+  border-right: 1px solid var(--grey-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-right {
+  width: var(--panel-right);
+  flex-shrink: 0;
+  background: #fff;
+}
+
+/* ── Error banner ───────────────────────────────────────────────────────────── */
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFF3E0;
+  border-bottom: 1px solid #FFB74D;
+  color: #E65100;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.error-icon {
+  font-size: 14px;
+}

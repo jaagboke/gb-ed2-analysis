@@ -1,0 +1,261 @@
+.ranked-table-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+
+.ranked-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--grey-border);
+  flex-shrink: 0;
+}
+
+.ranked-table-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ranked-table-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--grey-bg);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--grey-border);
+}
+
+/* ── Scrollable body ─────────────────────────────────────────────────────────── */
+
+.ranked-table-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────────── */
+
+.ranked-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.ranked-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+}
+
+.ranked-table th {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--text-muted);
+  padding: 7px 10px;
+  text-align: left;
+  border-bottom: 2px solid var(--grey-border);
+  white-space: nowrap;
+}
+
+.ranked-table td {
+  padding: 7px 10px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--grey-border);
+  transition: background 0.12s;
+}
+
+.table-row:hover td {
+  background: var(--green-pale);
+}
+
+.table-row-selected td {
+  background: var(--green-pale);
+  box-shadow: inset 3px 0 0 0 #F57F17;
+}
+
+/* ── Rank badge ─────────────────────────────────────────────────────────────── */
+
+.col-rank {
+  width: 34px;
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: var(--grey-bg);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--grey-border);
+}
+
+.rank-top {
+  background: var(--green-darkest);
+  color: #fff;
+  border-color: var(--green-darkest);
+}
+
+/* ── Zone name ──────────────────────────────────────────────────────────────── */
+
+.col-name {
+  width: 130px;
+}
+
+.zone-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.d4-pending-note {
+  font-size: 9px;
+  color: #E65100;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* ── Composite score ─────────────────────────────────────────────────────────── */
+
+.col-score {
+  width: 80px;
+}
+
+.composite-cell {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.composite-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--grey-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--grey-border);
+}
+
+.composite-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.35s ease;
+}
+
+.composite-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ── Dimension bars ─────────────────────────────────────────────────────────── */
+
+.col-dims {
+  width: 96px;
+}
+
+.dim-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dim-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dim-bar-key {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 16px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.dim-bar-track {
+  flex: 1;
+  height: 5px;
+  background: var(--grey-bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.dim-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Skeleton rows ───────────────────────────────────────────────────────────── */
+
+.table-row-skeleton td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--grey-border);
+}
+
+.sk {
+  display: block;
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.sk-rank  { width: 22px; height: 22px; border-radius: 50%; }
+.sk-name  { height: 10px; }
+.sk-score { height: 8px; }
+.sk-bars  { height: 20px; border-radius: 3px; }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Dimension legend ────────────────────────────────────────────────────────── */
+
+.dim-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 9px 14px;
+  border-top: 1px solid var(--grey-border);
+  flex-shrink: 0;
+}
+
+.dim-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.dim-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

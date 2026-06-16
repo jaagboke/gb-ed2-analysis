@@ -1,0 +1,15 @@
+dno,region_id,growth_metric,d3_score
+SSEN (Scottish Hydro),1,2.18546,0.396102
+SP Distribution,2,2.097595,0.35228
+Electricity North West,3,3.081019,0.842754
+Northern Powergrid (Northeast),4,3.029464,0.817041
+Northern Powergrid (Yorkshire),5,2.553928,0.579872
+SP Manweb,6,3.396305,1.0
+NGED South Wales,7,2.803092,0.704141
+NGED West Midlands,8,1.391255,0.0
+NGED East Midlands,9,2.591829,0.598775
+UKPN East of England,10,2.91328,0.759096
+NGED South West,11,1.824461,0.216057
+SSEN (Southern Electric),12,2.349056,0.477694
+UKPN London,13,2.430685,0.518406
+UKPN South East,14,2.167305,0.387048
