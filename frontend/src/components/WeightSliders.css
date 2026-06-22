@@ -200,3 +200,31 @@
   text-align: center;
   line-height: 1.4;
 }
+
+@media (max-width: 768px) {
+  .sliders-panel {
+    padding: 14px 16px 16px;
+    gap: 10px;
+  }
+
+  .sliders-list {
+    /* Two columns side by side so sliders don't dominate the page */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .slider-hint {
+    display: none;
+  }
+
+  .weight-slider::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+
+  .weight-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+  }
+}

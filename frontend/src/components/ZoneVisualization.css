@@ -113,6 +113,32 @@
   border-radius: 8px;
 }
 
+@media (max-width: 768px) {
+  .viz-root {
+    height: auto;
+    overflow: visible;
+  }
+
+  .viz-body {
+    flex: none;
+    overflow: visible;
+    padding: 12px 16px;
+  }
+
+  /* Give Leaflet an explicit height — height:100% collapses when parent is auto */
+  .leaflet-map {
+    height: 380px;
+  }
+
+  .viz-header {
+    padding: 10px 16px 8px;
+  }
+
+  .viz-legend {
+    padding: 6px 16px 10px;
+  }
+}
+
 /* ── Bar chart ──────────────────────────────────────────────────────────────── */
 
 .bar-chart-wrap {

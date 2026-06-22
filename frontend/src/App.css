@@ -81,6 +81,68 @@
   background: #fff;
 }
 
+/* ── Mobile layout ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* Unlock the fixed-height viewport layout so the page can scroll */
+  .app {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .app-body {
+    flex-direction: column;
+    overflow: visible;
+    height: auto;
+  }
+
+  /* All panels go full width */
+  .panel {
+    width: 100% !important;
+    overflow-y: visible;
+  }
+
+  .panel-left {
+    border-right: none;
+    border-bottom: 1px solid var(--grey-border);
+    order: 2;   /* sliders below the map */
+  }
+
+  .panel-centre {
+    border-right: none;
+    border-bottom: 1px solid var(--grey-border);
+    overflow: visible;
+    order: 1;   /* map first */
+  }
+
+  .panel-right {
+    order: 3;   /* rankings last */
+  }
+
+  /* Header: tighten up, hide badge */
+  .app-header {
+    height: auto;
+  }
+
+  .header-inner {
+    padding: 12px 16px;
+    align-items: flex-start;
+  }
+
+  .header-title {
+    font-size: 14px;
+  }
+
+  .header-subtitle {
+    font-size: 11px;
+  }
+
+  .header-badge {
+    display: none;
+  }
+}
+
 /* ── Error banner ───────────────────────────────────────────────────────────── */
 
 .error-banner {
