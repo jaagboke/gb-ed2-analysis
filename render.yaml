@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: gb-green-investment-tool
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true

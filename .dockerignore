@@ -1,0 +1,11 @@
+.git/
+frontend/node_modules/
+frontend/dist/
+venv/
+.venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+data/raw/
+methodology/
+articles/

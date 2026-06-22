@@ -4,7 +4,7 @@ import ZoneVisualization from './components/ZoneVisualization'
 import RankedTable from './components/RankedTable'
 import './App.css'
 
-const API = 'http://localhost:5000/api'
+const API = '/api'
 
 const INITIAL_WEIGHTS = { d1: 0.2, d2: 0.2, d3: 0.2, d4: 0.2, d5: 0.2 }
 
@@ -107,7 +107,7 @@ export default function App() {
           {apiError && (
             <div className="error-banner">
               <span className="error-icon">⚠</span>
-              API error: {apiError}. Is the Flask server running on port 5000?
+              API error: {apiError}
             </div>
           )}
           <ZoneVisualization

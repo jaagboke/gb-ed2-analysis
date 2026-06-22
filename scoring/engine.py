@@ -16,18 +16,14 @@ S3 Just Transition: w = [0.15, 0.15, 0.20, 0.35, 0.15]
 Dimension order: D1 Headroom, D2 Constraints, D3 Demand Growth,
                  D4 Vulnerability, D5 Carbon Intensity
 
-D4 note: Three non-English DNOs (SSEN Scottish Hydro, SP Distribution, NGED
-South Wales) have pending Scotland/Wales deprivation data. Their d4_score is
-treated as 0.0 (minimum) when computing composites, which is conservative but
-flags the data gap. A warning is printed for any such rows.
-
 Input files (relative to project root data/)
 --------------------------------------------
-zones_d1_headroom.csv    - dno, region_id, ttc_lvssb_days, d1_score
-zones_d2_constraints.csv - dno, region_id, binding_boundary, constraint_metric, d2_score
-zones_d3_demand.csv      - dno, region_id, growth_metric, d3_score
-zones_d4_vulnerability.csv - dno, region_id, lsoa_count, total_population, imd_score_wtd, d4_score, scotland_wales_note
-zones_d5_carbon.csv      - dno, region_id, intensity_gco2_kwh, d5_score
+zones_d1_headroom.csv      - dno, region_id, ttc_lvssb_days, d1_score
+zones_d2_constraints.csv   - dno, region_id, binding_boundary, constraint_metric, d2_score
+zones_d3_demand.csv        - dno, region_id, growth_metric, d3_score
+zones_d4_vulnerability.csv - dno, region_id, area_count, total_population,
+                             deprivation_pctile_wtd, d4_score
+zones_d5_carbon.csv        - dno, region_id, intensity_gco2_kwh, d5_score
 
 Output
 ------
@@ -117,35 +113,16 @@ def load_dimensions() -> pd.DataFrame:
     # Start with D1 (includes region_id)
     merged = frames["d1"][["dno", "region_id", "d1_score"]].copy()
 
-    # D4 pending rows: Scotland/Wales DNOs have NaN d4_score by design.
-    # Identify them before merging so we can fill and warn appropriately.
-    d4_raw = frames["d4"]
-    pending_mask = d4_raw["scotland_wales_note"].notna() & (
-        d4_raw["scotland_wales_note"].str.strip() != ""
-    )
-    pending_dnos = set(d4_raw.loc[pending_mask, "dno"].tolist())
-
     for dim in ("d2", "d3", "d4", "d5"):
         score_col = f"{dim}_score"
         src = frames[dim][["dno", score_col]]
         merged = merged.merge(src, on="dno", how="left")
 
-        # For D4, NaN is expected for the pending Scotland/Wales zones; fill with 0.
-        if dim == "d4":
-            if pending_dnos:
-                print(
-                    f"Engine | Warning: D4 score set to 0.0 (data pending) "
-                    f"for: {sorted(pending_dnos)}\n"
-                    f"         Composite scores for these zones are "
-                    f"conservative estimates."
-                )
-            merged["d4_score"] = merged["d4_score"].fillna(0.0)
-        else:
-            absent = merged[merged[score_col].isna()]["dno"].tolist()
-            if absent:
-                raise ValueError(
-                    f"DNO(s) in D1 but absent from {dim}: {absent}"
-                )
+        absent = merged[merged[score_col].isna()]["dno"].tolist()
+        if absent:
+            raise ValueError(
+                f"DNO(s) in D1 but absent from {dim}: {absent}"
+            )
 
     merged = merged.sort_values("region_id").reset_index(drop=True)
     return merged

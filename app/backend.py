@@ -31,7 +31,7 @@ import math
 from typing import Any
 
 import pandas as pd
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 from scoring.engine import SCENARIOS, load_dimensions
@@ -42,6 +42,8 @@ from scoring.engine import SCENARIOS, load_dimensions
 
 app = Flask(__name__)
 CORS(app)
+
+FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
 
 # ---------------------------------------------------------------------------
 # Data loading — happens once at import time
@@ -78,7 +80,7 @@ def _load_zone_data() -> tuple[pd.DataFrame | None, str | None]:
             "d1": ["ttc_lvssb_days"],
             "d2": ["binding_boundary", "constraint_metric"],
             "d3": ["growth_metric"],
-            "d4": ["imd_score_wtd", "scotland_wales_note"],
+            "d4": ["deprivation_pctile_wtd"],
             "d5": ["intensity_gco2_kwh"],
         }
 
@@ -87,13 +89,6 @@ def _load_zone_data() -> tuple[pd.DataFrame | None, str | None]:
             src = pd.read_csv(_DIMENSION_FILES[dim])
             keep = ["dno"] + [c for c in cols if c in src.columns]
             merged = merged.merge(src[keep], on="dno", how="left")
-
-        # Derive a boolean pending flag for D4
-        merged["d4_pending"] = (
-            merged["scotland_wales_note"].notna()
-            & (merged["scotland_wales_note"].str.strip() != "")
-        )
-        merged = merged.drop(columns=["scotland_wales_note"], errors="ignore")
 
         # Convert growth_metric from ratio (e.g. 2.4) to percentage for display
         if "growth_metric" in merged.columns:
@@ -207,14 +202,13 @@ def _zone_record(row: pd.Series) -> dict:
             "d5": _safe(row["d5_score"]),
         },
         "metrics": {
-            "d1_ttc_days":          _safe(row.get("ttc_lvssb_days")),
-            "d2_binding_boundary":  _safe(row.get("binding_boundary")),
-            "d2_constraint_mw":     _safe(row.get("constraint_metric")),
-            "d3_growth_pct":        _safe(row.get("d3_growth_pct")),
-            "d4_imd_score_wtd":     _safe(row.get("imd_score_wtd")),
-            "d5_intensity_gco2kwh": _safe(row.get("intensity_gco2_kwh")),
+            "d1_ttc_days":              _safe(row.get("ttc_lvssb_days")),
+            "d2_binding_boundary":      _safe(row.get("binding_boundary")),
+            "d2_constraint_mw":         _safe(row.get("constraint_metric")),
+            "d3_growth_pct":            _safe(row.get("d3_growth_pct")),
+            "d4_deprivation_pctile_wtd": _safe(row.get("deprivation_pctile_wtd")),
+            "d5_intensity_gco2kwh":     _safe(row.get("intensity_gco2_kwh")),
         },
-        "d4_pending": bool(row.get("d4_pending", False)),
     }
     return record
 
@@ -244,7 +238,7 @@ def zones():
     Return all 14 DNO zones with their dimension scores and raw metric values.
 
     Response shape:
-        { "count": 14, "zones": [ { dno, region_id, scores, metrics, d4_pending }, ... ] }
+        { "count": 14, "zones": [ { dno, region_id, scores, metrics }, ... ] }
     """
     ready, err = _data_ready()
     if not ready:
@@ -266,7 +260,7 @@ def scores():
           "weights": { d1..d5 },
           "count": 14,
           "zones": [
-            { rank, dno, region_id, composite, scores, metrics, d4_pending },
+            { rank, dno, region_id, composite, scores, metrics },
             ...
           ]   (sorted composite descending — rank 1 is most investable)
         }
@@ -423,18 +417,26 @@ def methodology():
                 "id":          "d4",
                 "name":        "Socioeconomic Vulnerability",
                 "definition":  (
-                    "Population-weighted average Index of Multiple Deprivation (IMD) "
-                    "score aggregated to DNO zone level. Captures the just transition "
-                    "dimension: higher deprivation zones have greater need for "
-                    "affordable clean energy access."
+                    "Population-weighted mean deprivation percentile aggregated to DNO "
+                    "zone level. Each nation's raw deprivation index is converted to a "
+                    "0-100 percentile rank within its own distribution before aggregation, "
+                    "making scores comparable across GB. Captures the just transition "
+                    "dimension: higher deprivation zones have greater need for affordable "
+                    "clean energy access."
                 ),
-                "source":      "DLUHC IMD 2019 File 7 (England only; Scotland/Wales pending)",
+                "source":      (
+                    "England: DLUHC IMD 2019 File 7 (LSOA level, 32,844 areas). "
+                    "Scotland: SIMD 2020v2 data zone look-up (6,976 data zones). "
+                    "Wales: WIMD 2019 index and domain ranks (1,909 LSOAs)."
+                ),
                 "direction":   "Higher score = higher deprivation = greater investment need",
-                "metric":      "Population-weighted mean IMD 2019 score",
+                "metric":      "Population-weighted mean harmonised deprivation percentile (0-100)",
                 "caveat":      (
-                    "Three non-English DNOs (SSEN Scottish Hydro, SP Distribution, "
-                    "NGED South Wales) have D4 score set to 0.0 pending harmonisation "
-                    "of Scotland/Wales deprivation indices."
+                    "Cross-national harmonisation converts each index to within-nation "
+                    "percentile ranks. This captures relative deprivation within each "
+                    "nation but does not reflect absolute deprivation differences between "
+                    "nations. Welsh LSOAs use uniform population weights (WIMD 2019 does "
+                    "not publish LSOA-level population)."
                 ),
             },
             {
@@ -454,7 +456,7 @@ def methodology():
             "DNO zone boundaries do not correspond to Local Authority geographies; spatial aggregation introduces approximation error.",
             "RIIO-ED2 TtC data reflects regulatory averages, not real-time network conditions.",
             "The model is static: zones are scored at a point in time rather than over a trajectory.",
-            "D4 scores for Scotland and Wales are pending harmonisation of separate national deprivation indices; those zones use a conservative score of 0.0.",
+            "D4 cross-national harmonisation uses within-nation percentile ranks; this captures relative but not absolute deprivation differences between England, Scotland, and Wales.",
             "The WADD model assumes linear preferences and no interaction effects between dimensions.",
         ],
         "bibliography": [
@@ -465,6 +467,31 @@ def methodology():
             "Arup / Cambridge Econometrics (2026). Gridunlocked: Unlocking the benefits of investing in the electricity grid.",
         ],
     })
+
+
+# ---------------------------------------------------------------------------
+# React SPA — serve built frontend for all non-API routes
+# ---------------------------------------------------------------------------
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react(path):
+    """
+    Serve the React SPA.  Static assets (JS/CSS) are returned directly;
+    everything else (including unknown paths) returns index.html so that
+    React Router can handle client-side navigation.
+    """
+    if not FRONTEND_DIST.is_dir():
+        return jsonify({
+            "error": "Frontend not built",
+            "detail": "Run:  cd frontend && npm run build",
+        }), 503
+
+    target = FRONTEND_DIST / path
+    if path and target.is_file():
+        return send_from_directory(str(FRONTEND_DIST), path)
+
+    return send_from_directory(str(FRONTEND_DIST), "index.html")
 
 
 # ---------------------------------------------------------------------------
