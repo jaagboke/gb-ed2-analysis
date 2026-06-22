@@ -119,7 +119,7 @@ export default function App() {
         </main>
 
         <aside className="panel panel-right">
-          <RankedTable zones={zones} loading={loading} selectedDno={selectedDno} />
+          <RankedTable zones={zones} loading={loading} selectedDno={selectedDno} onSelectZone={setSelectedDno} />
         </aside>
       </div>
     </div>

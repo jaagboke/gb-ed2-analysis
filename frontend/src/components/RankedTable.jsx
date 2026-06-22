@@ -75,7 +75,7 @@ function SkeletonRows() {
   )
 }
 
-export default function RankedTable({ zones, loading, selectedDno }) {
+export default function RankedTable({ zones, loading, selectedDno, onSelectZone }) {
   const rowRefs = useRef({})
 
   // When a zone is selected on the map, scroll it into view in this panel.
@@ -110,6 +110,7 @@ export default function RankedTable({ zones, loading, selectedDno }) {
                     key={zone.dno}
                     ref={el => { if (el) rowRefs.current[zone.dno] = el }}
                     className={`table-row${zone.dno === selectedDno ? ' table-row-selected' : ''}`}
+                    onClick={() => onSelectZone?.(zone.dno === selectedDno ? null : zone.dno)}
                   >
                     <td className="col-rank">
                       <span className={`rank-badge${zone.rank <= 3 ? ' rank-top' : ''}`}>

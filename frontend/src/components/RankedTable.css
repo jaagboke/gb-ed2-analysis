@@ -72,6 +72,10 @@
   transition: background 0.12s;
 }
 
+.table-row {
+  cursor: pointer;
+}
+
 .table-row:hover td {
   background: var(--green-pale);
 }
