@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import 'leaflet/dist/leaflet.css'
 import './ZoneVisualization.css'
 
 /* ── Colour helpers ─────────────────────────────────────────────────────────── */
@@ -228,9 +229,6 @@ export default function ZoneVisualization({ zones, loading, selectedDno, onSelec
 
   // Try to load DNO boundary GeoJSON once
   useEffect(() => {
-    // Dynamically import leaflet CSS only when map might be used
-    import('leaflet/dist/leaflet.css').catch(() => {})
-
     fetch('/dno-boundaries.geojson')
       .then(r => { if (!r.ok) throw new Error('Not found'); return r.json() })
       .then(data => { setGeoJson(data); setMapReady(true) })
