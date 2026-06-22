@@ -18,11 +18,11 @@ A data-driven tool for ranking Great Britain's 14 Distribution Network Operator 
 
 | # | Dimension | Source | Direction |
 |---|-----------|--------|-----------|
-| D1 | **Renewable Headroom** — available grid capacity for new connections, measured by RIIO-ED2 LVSSB Time to Connect (working days) | Ofgem RIIO-ED2 2023–24 Supplementary Data | Lower TtC → higher score |
-| D2 | **Grid Constraint Severity** — transmission boundary constraint limits (MW); lower limits signal more congested boundaries | NESO 24-month Constraint Limits | Lower MW → higher score |
-| D3 | **Demand Growth Trajectory** — 3-year relative growth in licensed plug-in vehicles (BEV + PHEV) at LAD level, aggregated to DNO zone | DfT VEH0142 Licensed plug-in vehicles by local authority | Higher growth → higher score |
-| D4 | **Socioeconomic Vulnerability** — population-weighted mean deprivation percentile across all small areas in each DNO zone, harmonised across England (IMD 2019), Scotland (SIMD 2020v2), and Wales (WIMD 2019) | DLUHC / Scottish Government / Welsh Government | Higher deprivation → higher score |
-| D5 | **Carbon Intensity** — average grid carbon intensity (gCO₂eq/kWh) by DNO zone; higher intensity zones offer greater marginal abatement value | NESO Carbon Intensity API | Higher intensity → higher score |
+| D1 | **Renewable Headroom** - available grid capacity for new connections, measured by RIIO-ED2 LVSSB Time to Connect (working days) | Ofgem RIIO-ED2 2023–24 Supplementary Data | Lower TtC → higher score |
+| D2 | **Grid Constraint Severity** - transmission boundary constraint limits (MW); lower limits signal more congested boundaries | NESO 24-month Constraint Limits | Lower MW → higher score |
+| D3 | **Demand Growth Trajectory** - 3-year relative growth in licensed plug-in vehicles (BEV + PHEV) at LAD level, aggregated to DNO zone | DfT VEH0142 Licensed plug-in vehicles by local authority | Higher growth → higher score |
+| D4 | **Socioeconomic Vulnerability** - population-weighted mean deprivation percentile across all small areas in each DNO zone, harmonised across England (IMD 2019), Scotland (SIMD 2020v2), and Wales (WIMD 2019) | DLUHC / Scottish Government / Welsh Government | Higher deprivation → higher score |
+| D5 | **Carbon Intensity** - average grid carbon intensity (gCO₂eq/kWh) by DNO zone; higher intensity zones offer greater marginal abatement value | NESO Carbon Intensity API | Higher intensity → higher score |
 
 ### Weight Scenarios
 
@@ -151,11 +151,11 @@ The repo includes a `Dockerfile` and `render.yaml` for single-service deployment
 
 1. Push the repo to GitHub
 2. Log in to Render → **New** → **Web Service**
-3. Connect your GitHub repo — Render detects the `Dockerfile` automatically
+3. Connect your GitHub repo - Render detects the `Dockerfile` automatically
 4. Set plan to **Free** and deploy
 5. Your public URL will be `https://<service-name>.onrender.com`
 
-To build the frontend locally before deploying (optional — the Dockerfile does this automatically):
+To build the frontend locally before deploying (optional - the Dockerfile does this automatically):
 
 ```bash
 cd frontend
@@ -179,16 +179,16 @@ Each dimension is min-max normalised to [0, 1] across the 14 DNO zones before we
 **Key limitations:**
 - DNO boundaries do not align precisely with Local Authority geographies; spatial aggregation introduces some approximation error.
 - D4 cross-national harmonisation converts each national index to within-nation percentile ranks, capturing relative but not absolute deprivation differences between England, Scotland, and Wales.
-- The model is a static snapshot — zones are scored at a point in time rather than over a trajectory.
+- The model is a static snapshot - zones are scored at a point in time rather than over a trajectory.
 
 ---
 
 ## Data Sources
 
-- **Ofgem** — RIIO-ED2 2023–24 Annual Report Supplementary Data (D1)
-- **NESO Open Data Portal** — 24-month Constraint Limits (D2)
-- **DfT** — VEH0142 Licensed plug-in vehicles by local authority (D3)
-- **DLUHC** — English Indices of Deprivation 2019, File 7 (D4)
-- **Scottish Government** — SIMD 2020v2 data zone look-up (D4)
-- **Welsh Government** — WIMD 2019 index and domain ranks (D4)
-- **NESO Carbon Intensity API** — api.carbonintensity.org.uk (D5)
+- **Ofgem** - RIIO-ED2 2023–24 Annual Report Supplementary Data (D1)
+- **NESO Open Data Portal** - 24-month Constraint Limits (D2)
+- **DfT** - VEH0142 Licensed plug-in vehicles by local authority (D3)
+- **DLUHC** - English Indices of Deprivation 2019, File 7 (D4)
+- **Scottish Government** - SIMD 2020v2 data zone look-up (D4)
+- **Welsh Government** - WIMD 2019 index and domain ranks (D4)
+- **NESO Carbon Intensity API** - api.carbonintensity.org.uk (D5)
