@@ -141,28 +141,6 @@ All endpoints return JSON.
 | `GET /api/scenarios` | Three predefined weight scenarios with metadata |
 | `GET /api/methodology` | Full methodology description (sources, formula, limitations) |
 
----
-
-## Deployment (Render)
-
-The repo includes a `Dockerfile` and `render.yaml` for single-service deployment on [Render](https://render.com). Flask serves the pre-built React frontend as static files alongside the API.
-
-**Steps:**
-
-1. Push the repo to GitHub
-2. Log in to Render → **New** → **Web Service**
-3. Connect your GitHub repo - Render detects the `Dockerfile` automatically
-4. Set plan to **Free** and deploy
-5. Your public URL will be `https://<service-name>.onrender.com`
-
-To build the frontend locally before deploying (optional - the Dockerfile does this automatically):
-
-```bash
-cd frontend
-npm run build   # outputs to frontend/dist/
-```
-
-> **Note:** The free Render tier spins down after 15 minutes of inactivity. The first request after sleep takes ~30 seconds.
 
 ---
 
